@@ -1,3 +1,5 @@
+import re
+
 reference = open("passports.txt", "r")
 
 imported = []
@@ -51,27 +53,14 @@ for i in passports:
                 elif unit == "in" and (59 > int(value[:-2]) > 76):
                     continue
             
-            elif field == "hcl":
-                if value[0] != "#" or len(value[1:]) != 6:
-                    continue
-                is_hex = True
-                for i in value[1:]:
-                    if i.isdigit() == (type(i) != str):
-                        is_hex = False
-                    if i.isdigit() and (0 > int(i) > 9):
-                        is_hex = False
-                    elif type(i) == str and ("a" > i > "f"):
-                        is_hex = False
-                if is_hex == False:
-                    continue
+            elif field == "hcl" and re.match(r"#[\da-f]{6}", value) == None:
+                continue
             
-            elif field == "ecl":
-                if value not in ecl:
-                    continue
+            elif field == "ecl" and value not in ecl:
+                continue
 
-            elif field == "pid":
-                if len(value) != 9:
-                    continue
+            elif field == "pid" and len(value) != 9:
+                continue
 
 
             required.remove(field)
